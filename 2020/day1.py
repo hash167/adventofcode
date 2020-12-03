@@ -2,24 +2,29 @@ import sys
 
 
 def partA(inputs: list) -> int:
-    l = len(inputs)
-    for i in range(l):
-        for j in range(l):
-            if i == j:
-                continue
-            if (inputs[i]+inputs[j]) == 2020:
-                return inputs[i]*inputs[j]
+    seen = []
+    for i in range(len(inputs)):
+        rem = 2020 - inputs[i]
+        if inputs[i] in seen:
+            return rem * inputs[i]
+        seen.append(rem)
     return 0
 
 
 def partB(inputs: list) -> int:
-    l = len(inputs)
-    for i in range(l):
-        for j in range(l):
-            for k in range(l):
-                if i == j or j == k or i == k:
-                    continue
-                if (inputs[i] + inputs[j] + inputs[k]) == 2020:
+    input_length = len(inputs)
+    seen = []
+    for i in range(input_length):
+        for j in range(input_length):
+            if i == j:
+                continue
+            partial_sum = inputs[i] + inputs[j]
+            if partial_sum > 2020:
+                continue
+            else:
+                seen.append(partial_sum)
+            for k in range(input_length):
+                if (2020 - inputs[k]) in seen and (k != j or k != i):
                     return inputs[i] * inputs[j] * inputs[k]
     return 0
 
