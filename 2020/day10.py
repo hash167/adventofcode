@@ -27,15 +27,14 @@ def partA(voltages):
 
 
 def partB(voltages):
-    # Memoization
-    visited = defaultdict(int)
-    # Number of times we visit a node
+    visited = [0] * (voltages[-1] + 1)
+    # One way to get to zero
     visited[0] = 1
-    for num in voltages:
+    for v in voltages:
         for i in range(1, 4):
-            if num - i in visited:
-                visited[num] += visited[num - i]
-    return visited[max(voltages)]  
+            if visited[v - i]:
+                visited[v] += visited[v - i]
+    return visited[-1]
 
 
 if __name__ == "__main__":
