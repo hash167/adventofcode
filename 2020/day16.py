@@ -45,6 +45,15 @@ def partA(rules, my, nearby):
     return invalid, valid
 
 
+def check_invalid_pos(pos_values, ranges):
+    invalid = False
+    for item in pos_values:
+        if not in_range(item, ranges):
+            invalid = True
+            break
+    return invalid
+
+
 def partB(rules, my, valid):
     values_at_pos = defaultdict(list)
     for ticket in valid:
@@ -53,16 +62,13 @@ def partB(rules, my, valid):
     rules_mapping = defaultdict(dict)
     for pos, values in values_at_pos.items():
         for name, ranges in rules.items():
-            cont_outer = False
-            for item in values:
-                if not in_range(item, ranges):
-                    cont_outer = True
-                    break
-            if cont_outer:
+            if check_invalid_pos(values, ranges):
                 continue
             rules_mapping[name][pos] = True
     result = {}
     while rules_mapping:
+        single = [{name: list(v.keys())[0]} for name, v in rules_mapping.items() if len(v) == 1 ]
+        print(single)
         for name, pos in rules_mapping.copy().items():
             if len(pos) != 1:
                 continue
