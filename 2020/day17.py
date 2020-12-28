@@ -1,14 +1,23 @@
+import sys
 from collections import defaultdict, namedtuple
 
-Coord = namedtuple('Coord', ['X', 'Y', 'Z'])
+Coord = namedtuple('Coord', ['X', 'Y', 'Z', 'W'])
+part_b = False
+if sys.argv[1] == 'PartB':
+    part_b = True
 
 
 def find_neighbors(c):
-    neighbors = [Coord(c[0]+i, c[1]+j, c[2]+k)
+    if part_b:
+        fouth_degree = range(-1, 2)
+    else:
+        fouth_degree = range(0, 1)
+    neighbors = [Coord(c[0]+i, c[1]+j, c[2]+k, c[3]+l)
                  for i in range(-1, 2)
                  for j in range(-1, 2)
                  for k in range(-1, 2)
-                 if not (i == 0 and j == 0 and k == 0)]
+                 for l in fouth_degree
+                 if not (i == 0 and j == 0 and k == 0 and l == 0)]
     return neighbors
 
 
@@ -30,11 +39,12 @@ def step(prev_active):
     return new_active
 
 
-def partA(prev_active):
+def main(prev_active):
     for _ in range(6):
         prev_active = step(prev_active)
 
     return len(prev_active)
+
 
 
 if __name__ == "__main__":
@@ -43,7 +53,6 @@ if __name__ == "__main__":
         for i, line in enumerate(f):
             for j, c in enumerate(list(line.strip())):
                 if c == "#":
-                    active.append(Coord(i, j, 0))
-        # print(active, len(active))
-        print(partA(active))
+                    active.append(Coord(i, j, 0, 0))
+        print(main(active))
 
